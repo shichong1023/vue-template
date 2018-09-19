@@ -1,0 +1,69 @@
+// by shichong  mail: shichong1023@163.com
+/* custom */
+/* 移动端 隐藏滚动条 */
+/*::-webkit-scrollbar {
+  display: none;
+}*/
+
+caption, th, td {
+  text-align: center;
+  font-weight: normal;
+  vertical-align: middle;
+}
+
+:focus { outline: 0;}
+
+a{ text-decoration:none;}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.inline{
+  display: inline-block;
+}
+
+.charts{
+  width: 100%;
+  min-height: 100px;/*no*/
+}
+
+.fillcontain{
+  width: 100%;
+  height: 100%;
+}
+
+.clearfix { height: 1%;}
+
+.clearfix:after {
+  content: " ";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+address, caption, cite, code, dfn, em, strong, th, var {
+  font-style:normal;
+  font-weight:normal;
+}
+
+a:hover img{ border:none;}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-size: 16px;
+  font-family: "Microsoft Yahei", "Hiragino Sans GB", "Helvetica Neue", Helvetica, tahoma, arial, Verdana, sans-serif, "WenQuanYi Micro Hei", "\5B8B\4F53";;
+  //font-family: -apple-system, BlinkMacSystemFont, "PingFang SC","Helvetica Neue",STHeiti,"Microsoft Yahei",Tahoma,Simsun,sans-serif;
+}
+
+
+[v-cloak] {
+  display: none !important;
+}
