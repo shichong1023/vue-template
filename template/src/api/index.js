@@ -81,6 +81,7 @@ function apiAxios(method, url, params, success, config = {
   showLoading: true,
   isForm: false, //表单
   isJson: false, //json 数据
+  responseType: 'json' //blob
 }, failure) {
   //跟路径
   var baseURL = root;
@@ -115,6 +116,7 @@ function apiAxios(method, url, params, success, config = {
   axios({
     method: method,
     url: url,
+    responseType: config.responseType,
     data: method === 'POST' || method === 'PUT' ? params : null,
     params: method === 'GET' || method === 'DELETE' ? params : null,
     baseURL: baseURL,
@@ -141,7 +143,11 @@ function apiAxios(method, url, params, success, config = {
           router.replace('/')
         }else{
           if (success) {
-            success(res.data)
+            if ("blob" == config.responseType) {
+              success(res)
+            } else {
+              success(res.data)
+            }
           }
         }
       }
