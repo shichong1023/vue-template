@@ -63,7 +63,7 @@ export default {
           this.$router.push('index')
 
           // var url = _this.$pathUrl.login;
-          // this.$api.get(url, params, function(res){
+          // this.$api.get(url, params, res => {
           //   if(1 == res.state){
           //     localStorage.setItem("username",res.nickname)
 
@@ -74,7 +74,7 @@ export default {
           //     });
           //     this.$router.push('index')
           //   }else {
-          //     _this.$message.error('用户名或密码错误！');
+          //     this.$message.error('用户名或密码错误！');
           //   }
           // })
         } else {
