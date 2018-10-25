@@ -5,10 +5,10 @@ import config from './index'
 Vue.directive('has', {
   bind: function (el, binding) {
     if (!Vue.prototype.$_has(binding.value)) {
-      if (el.parentNode){
+      if (el.parentNode) {
         el.parentNode.removeChild(el);
-      }else{
-        el.style.display="none"
+      } else {
+        el.style.display = "none"
       }
     }
   }
@@ -16,16 +16,14 @@ Vue.directive('has', {
 
 Vue.prototype.$_has = function (value) {
   let isExist = false;
-  let permissionStr = sessionStorage.getItem(config.limitName);
+  let permissionStr = sessionStorage.getItem(config.proName + "_permission")
+
   if (permissionStr == undefined || permissionStr == null) {
-    return false;
+    return isExist;
   }
-  let permission = permissionStr.split('&');
-  for (let i = 0; i < permission.length; i++) {
-    if (permission[i].indexOf(value) > -1) {
-      isExist = true;
-      break;
-    }
+
+  if (permissionStr.indexOf(value) > -1) {
+    isExist = true;
   }
   return isExist;
 };
