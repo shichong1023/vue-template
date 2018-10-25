@@ -10,7 +10,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {//反向代理示例
+      // '/wtSec/': {
+      //   target: 'http://10.72.7.13:8099/',
+      //   changeOrigin: false,
+      //   secure: false,
+      //   pathRewrite: {
+      //     '^/wtSec': ''
+      //   }
+      // },
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
