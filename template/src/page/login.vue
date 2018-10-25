@@ -13,6 +13,7 @@
           <el-form-item prop="password" class="form-item-box">
             <el-input type="password" placeholder="密码" v-model="loginForm.password" @keyup.enter.native="submitForm('loginForm')"></el-input>
           </el-form-item>
+          <el-checkbox v-model="checkedUser">记住用户名</el-checkbox>
           <el-form-item class="form-item-box">
             <el-button type="primary" @click="submitForm('loginForm')" class="submit-btn">登陆</el-button>
           </el-form-item>
@@ -23,9 +24,13 @@
 </template>
 
 <script>
+import {mixinCache} from './mixins/cache.js'
 export default {
+  mixins: [mixinCache],
   data () {
     return {
+      showError: false,
+      errorInfo: "",
       loginForm: {
         username: '',
         password: '',
@@ -39,6 +44,7 @@ export default {
         ],
       },
       showLogin: false,
+      checkedUser: false,
     }
   },
 
@@ -47,47 +53,90 @@ export default {
   computed: {},
 
   mounted() {
-    this.showLogin = true;
+    this.showLogin = true
+    let userName = this.getCookie(this.$config.proName + "_userName")
+    let userPwd = this.getCookie(this.$config.proName + "_userPwd")
+
+    if(userName && userName){
+      this.loginForm.username = userName
+      this.loginForm.password = userPwd
+      this.checkedUser = true
+    }
   },
 
   methods: {
     submitForm(formName) {
-      var _this = this;
       this.$refs[formName].validate( (valid) => {
         if (valid) {
+					let username = this.allTrim(this.loginForm.username)
+          let password = this.allTrim(this.loginForm.password)
           var params = {
-            username: this.loginForm.username,
-            password: this.loginForm.password,
+            username: username,
+            password: password,
             appid: this.$config.appId
+					}
+
+					if(username.length <= 0 || password.length <= 0){
+            this.errorInfo = "请输入用户名或密码!"
+            this.showError = true
+            return
+          }else{
+            this.showError = false
           }
+
           this.$router.push('index')
 
-          // var url = _this.$pathUrl.login;
-          // this.$api.get(url, params, res => {
-          //   if(1 == res.state){
-          //     localStorage.setItem("username",res.nickname)
-
-          //     this.$message({
-          //       type: 'success',
-          //       message: '登录成功',
-          //       duration: "2000"
-          //     });
-          //     this.$router.push('index')
-          //   }else {
-          //     this.$message.error('用户名或密码错误！');
-          //   }
-          // })
-        } else {
+         	var url = this.$pathUrl.login;
+					// this.$api.get(url, params, (res) => {
+					// 		if(1 == res.state){
+					// 			this.setSession(this.$config.proName + "_username",res.nickname)
+					// 			this.setSession(this.$config.proName + "_userid",res.userid)
+					// 			if(res.role){
+					// 				this.setSession(this.$config.proName + "_role",res.role)
+					// 			}
+					// 			//判断复选框是否被勾选 勾选则调用配置cookie方法
+					// 			if(true == this.checkedUser){
+					// 				//传入用户名，密码，和保存天数3个参数
+					// 				this.setCookie(this.loginForm.username, this.loginForm.password, 7)
+					// 			}else{
+					// 				this.clearCookie()
+					// 			}
+					// 			//获得用户权限
+					// 			this.getUserLimit()
+					// 		}else{
+					// 			this.errorInfo = "用户名或密码错误!"
+          //   		this.showError = true
+					// 			this.$message.error(res.message + "!");
+					// 		}
+					// })
+        }else {
           return false;
         }
       });
+    },
+    //获得用户权限
+    getUserLimit(){
+      let params = {
+        appid: this.$config.appId
+      }
+      let url = this.$pathUrl.limit
+      this.$api.post(url, params, r => {
+        let data = r.data
+        let list = []
+        data.button.forEach((item,i)=>{
+          list.push(item.fdButtonStyle)
+				})
+				this.setSession(null,list)
+				this.setSession(this.$config.proName + "_regionId",data.region[0].fdRegionid)
+        this.$router.push('index')
+      },{isForm: true});
     },
   }
 }
 
 </script>
 
-<style lang='scss' scoped>
+<style lang='scss'>
   #login{
     width: 100%;
     height: 100%;
@@ -108,7 +157,7 @@ export default {
       top: 50%;
       left: 50%;
       width: 300px;
-      height: 210px;
+      height: 250px;
       margin-top: -105px;
       margin-left: -150px;
       padding: 25px;
@@ -119,6 +168,16 @@ export default {
       .form-item-box{
         width: 100%;
         height: 40px;
+      }
+
+      .el-checkbox{
+        float: left;
+        margin-bottom: 5px;
+
+        .el-checkbox__inner{
+          position: relative;
+          top: -2px;
+        }
       }
 
 
